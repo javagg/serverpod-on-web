@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "name": "cf-hello",
+  "version": "1.0.0",
+  "description": "Dart hello world for Cloudflare Workers",
+  "scripts": {
+  },
+  "devDependencies": {
+    "supabase": "^2.19.7"
+  }
+}

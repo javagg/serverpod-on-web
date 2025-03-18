@@ -1,0 +1,5 @@
+[functions.hello]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/build/main.js"
+static_files = [ "./functions/*.html" ]

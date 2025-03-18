@@ -1,0 +1,35 @@
+// TODO: Remove this library statement when bumping to Dart 3.6.
+// Until then it needs to cause the analyzer to report an issue,
+// in order to avoid a bug in the Dart analyzer.
+// See: https://github.com/serverpod/serverpod/pull/2900
+library serverpod;
+
+// Config
+export 'package:serverpod_shared/src/config.dart';
+
+// Server
+export 'package:serverpod/server.dart';
+
+// // Web server
+// export 'package:serverpod/relic.dart';
+
+// Database
+export 'package:serverpod/database.dart';
+
+// Serialization and logging
+export 'package:serverpod_serialization/serverpod_serialization.dart';
+export 'package:serverpod/src/util/http_request_extension.dart';
+export 'package:serverpod/src/generated/log_level.dart';
+
+// // Cloud storage
+// export 'package:serverpod/src/cloud_storage/cloud_storage.dart';
+// export 'package:serverpod/src/cloud_storage/database_cloud_storage.dart';
+
+// Cache
+export 'package:serverpod/src/cache/cache_miss_handler.dart';
+
+// // Experimental features
+// export 'src/server/experimental_features.dart';
+// export 'diagnostic_events.dart';
+
+export 'package:meta/meta.dart' show useResult;
