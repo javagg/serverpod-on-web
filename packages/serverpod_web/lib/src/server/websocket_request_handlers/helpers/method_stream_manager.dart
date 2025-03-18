@@ -7,86 +7,87 @@ import 'package:serverpod/serverpod.dart';
 import 'package:serverpod/src/server/diagnostic_events/diagnostic_events.dart';
 import 'package:serverpod/src/server/serverpod.dart';
 import 'package:serverpod_shared/serverpod_shared.dart';
+import 'package:serverpod/src/server/session.dart';
 
-class _RevokedAuthenticationHandler {
-  final MessageCentralListenerCallback? _revokedAuthenticationCallback;
-  final AuthenticationInfo? _authenticationInfo;
+// class _RevokedAuthenticationHandler {
+//   final MessageCentralListenerCallback? _revokedAuthenticationCallback;
+//   final AuthenticationInfo? _authenticationInfo;
 
-  _RevokedAuthenticationHandler._(
-    AuthenticationInfo authenticationInfo,
-    void Function(dynamic event) revokedAuthenticationCallback,
-  )   : _authenticationInfo = authenticationInfo,
-        _revokedAuthenticationCallback = revokedAuthenticationCallback;
+//   _RevokedAuthenticationHandler._(
+//     AuthenticationInfo authenticationInfo,
+//     void Function(dynamic event) revokedAuthenticationCallback,
+//   )   : _authenticationInfo = authenticationInfo,
+//         _revokedAuthenticationCallback = revokedAuthenticationCallback;
 
-  /// Call when the stream call is cancelled to do proper cleanup.
-  Future<void> destroy(Session session) async {
-    var localRevokedAuthenticationCallback = _revokedAuthenticationCallback;
-    var localAuthenticationInfo = _authenticationInfo;
+//   /// Call when the stream call is cancelled to do proper cleanup.
+//   Future<void> destroy(Session session) async {
+//     var localRevokedAuthenticationCallback = _revokedAuthenticationCallback;
+//     var localAuthenticationInfo = _authenticationInfo;
 
-    if (localRevokedAuthenticationCallback != null &&
-        localAuthenticationInfo != null) {
-      session.messages.removeListener(
-        MessageCentralServerpodChannels.revokedAuthentication(
-          localAuthenticationInfo.userId,
-        ),
-        localRevokedAuthenticationCallback,
-      );
-    }
-  }
+//     if (localRevokedAuthenticationCallback != null &&
+//         localAuthenticationInfo != null) {
+//       session.messages.removeListener(
+//         MessageCentralServerpodChannels.revokedAuthentication(
+//           localAuthenticationInfo.userId,
+//         ),
+//         localRevokedAuthenticationCallback,
+//       );
+//     }
+//   }
 
-  static Future<_RevokedAuthenticationHandler?>
-      createIfAuthenticationIsRequired(
-    Endpoint endpoint,
-    Session session, {
-    required void Function() onRevokedAuthentication,
-  }) async {
-    var authenticationIsRequired =
-        endpoint.requireLogin || endpoint.requiredScopes.isNotEmpty;
-    if (!authenticationIsRequired) {
-      return null;
-    }
+//   static Future<_RevokedAuthenticationHandler?>
+//       createIfAuthenticationIsRequired(
+//     Endpoint endpoint,
+//     Session session, {
+//     required void Function() onRevokedAuthentication,
+//   }) async {
+//     var authenticationIsRequired =
+//         endpoint.requireLogin || endpoint.requiredScopes.isNotEmpty;
+//     if (!authenticationIsRequired) {
+//       return null;
+//     }
 
-    var authenticationInfo = await session.authenticated;
-    if (authenticationInfo == null) {
-      throw StateError(
-        'Authentication was required but no authentication info could be retrieved.',
-      );
-    }
+//     var authenticationInfo = await session.authenticated;
+//     if (authenticationInfo == null) {
+//       throw StateError(
+//         'Authentication was required but no authentication info could be retrieved.',
+//       );
+//     }
 
-    void localRevokedAuthenticationCallback(event) async {
-      var authenticationRevokedReason = switch (event) {
-        RevokedAuthenticationUser _ =>
-          AuthenticationFailureReason.unauthenticated,
-        RevokedAuthenticationAuthId revokedAuthId =>
-          revokedAuthId.authId == authenticationInfo.authId
-              ? AuthenticationFailureReason.unauthenticated
-              : null,
-        RevokedAuthenticationScope revokedScopes => revokedScopes.scopes.any(
-            (s) => endpoint.requiredScopes.map((s) => s.name).contains(s),
-          )
-              ? AuthenticationFailureReason.insufficientAccess
-              : null,
-        _ => null,
-      };
+//     void localRevokedAuthenticationCallback(event) async {
+//       var authenticationRevokedReason = switch (event) {
+//         RevokedAuthenticationUser _ =>
+//           AuthenticationFailureReason.unauthenticated,
+//         RevokedAuthenticationAuthId revokedAuthId =>
+//           revokedAuthId.authId == authenticationInfo.authId
+//               ? AuthenticationFailureReason.unauthenticated
+//               : null,
+//         RevokedAuthenticationScope revokedScopes => revokedScopes.scopes.any(
+//             (s) => endpoint.requiredScopes.map((s) => s.name).contains(s),
+//           )
+//               ? AuthenticationFailureReason.insufficientAccess
+//               : null,
+//         _ => null,
+//       };
 
-      if (authenticationRevokedReason != null) {
-        onRevokedAuthentication();
-      }
-    }
+//       if (authenticationRevokedReason != null) {
+//         onRevokedAuthentication();
+//       }
+//     }
 
-    session.messages.addListener(
-      MessageCentralServerpodChannels.revokedAuthentication(
-        authenticationInfo.userId,
-      ),
-      localRevokedAuthenticationCallback,
-    );
+//     session.messages.addListener(
+//       MessageCentralServerpodChannels.revokedAuthentication(
+//         authenticationInfo.userId,
+//       ),
+//       localRevokedAuthenticationCallback,
+//     );
 
-    return _RevokedAuthenticationHandler._(
-      authenticationInfo,
-      localRevokedAuthenticationCallback,
-    );
-  }
-}
+//     return _RevokedAuthenticationHandler._(
+//       authenticationInfo,
+//       localRevokedAuthenticationCallback,
+//     );
+//   }
+// }
 
 class _InputStreamContext implements _StreamContext {
   @override
