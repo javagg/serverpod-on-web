@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+// import 'dart:io';
+import '../../mock.dart';
 
 import 'package:serverpod/serverpod.dart';
-import 'package:serverpod/src/server/serverpod.dart';
+// import 'package:serverpod/src/server/serverpod.dart';
 import 'package:serverpod/src/server/session.dart';
-import 'package:serverpod/src/server/diagnostic_events/diagnostic_events.dart';
+// import 'package:serverpod/src/server/diagnostic_events/diagnostic_events.dart';
 
 /// This class is used by the [Server] to handle incoming websocket requests
 /// to an endpoint. It is not intended to be used directly by the user.
