@@ -1,5 +1,7 @@
 import 'dart:async';
 
+abstract interface class DatabaseAccessor {}
+
 class HttpRequest {}
 
 class WebSocket implements Stream<dynamic /*String|List<int>*/ >, StreamSink<dynamic /*String|List<int>*/ > {

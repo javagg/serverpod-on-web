@@ -9,7 +9,6 @@ abstract class Endpoint {
   /// name of the class (excluding any Endpoint suffix).
   String get name => _name;
 
-  
   /// Invoked when a message is sent to this endpoint from the client.
   /// Override this method to create your own custom [StreamingEndpoint].
   Future<void> handleStreamMessage(
@@ -18,6 +17,9 @@ abstract class Endpoint {
   /// Override this method to setup a new stream when a client connects to the
   /// server.
   Future<void> streamOpened(StreamingSession session) async {}
+
+  /// Called when a stream was closed.
+  Future<void> streamClosed(StreamingSession session) async {}
 }
 
 class EndpointConnector {
