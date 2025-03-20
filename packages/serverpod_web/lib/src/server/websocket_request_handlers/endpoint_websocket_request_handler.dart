@@ -3,7 +3,10 @@ import 'dart:convert';
 // import 'dart:io';
 import '../../mock.dart';
 
-import 'package:serverpod/serverpod.dart';
+import 'package:serverpod_serialization/serverpod_serialization.dart';
+import '../../server/endpoint_dispatch.dart';
+import '../server.dart';
+// import 'package:serverpod/serverpod.dart';
 // import 'package:serverpod/src/server/serverpod.dart';
 import 'package:serverpod/src/server/session.dart';
 // import 'package:serverpod/src/server/diagnostic_events/diagnostic_events.dart';
@@ -76,7 +79,7 @@ abstract class EndpointWebsocketRequestHandler {
             endpointConnector = await server.endpoints.getEndpointConnector(
                 session: session, endpointPath: endpointName);
           } on NotAuthorizedException catch (e, s) {
-            _reportException(server, e, s, session: session);
+            // _reportException(server, e, s, session: session);
             continue;
           } on EndpointNotFoundException {
             throw Exception('Endpoint not found: $endpointName');
@@ -102,10 +105,10 @@ abstract class EndpointWebsocketRequestHandler {
             messageError = e;
             messageStackTrace = s;
 
-            _reportException(server, e, s,
-                message:
-                    'Internal server error. Uncaught exception in handleStreamMessage.',
-                session: session);
+            // _reportException(server, e, s,
+            //     message:
+            //         'Internal server error. Uncaught exception in handleStreamMessage.',
+            //     session: session);
           }
 
           var duration = DateTime.now().difference(startTime);
@@ -122,7 +125,7 @@ abstract class EndpointWebsocketRequestHandler {
         error = e;
         stackTrace = s;
 
-        _reportException(server, e, s, session: session);
+        // _reportException(server, e, s, session: session);
       }
 
       // TODO: Possibly keep a list of open streams instead
@@ -138,7 +141,7 @@ abstract class EndpointWebsocketRequestHandler {
       }
       await session.close(error: error, stackTrace: stackTrace);
     } catch (e, s) {
-      _reportException(server, e, s, httpRequest: request);
+      // _reportException(server, e, s, httpRequest: request);
       return;
     } finally {
       onClosed();
@@ -158,10 +161,10 @@ abstract class EndpointWebsocketRequestHandler {
       );
       await connector.endpoint.streamOpened(session);
     } on NotAuthorizedException catch (e, s) {
-      _reportException(session.server, e, s, session: session);
+      // _reportException(session.server, e, s, session: session);
       return;
     } catch (e, s) {
-      _reportException(session.server, e, s, session: session);
+      // _reportException(session.server, e, s, session: session);
       return;
     }
   }
@@ -179,40 +182,40 @@ abstract class EndpointWebsocketRequestHandler {
       );
       await connector.endpoint.streamClosed(session);
     } on NotAuthorizedException catch (e, s) {
-      _reportException(session.server, e, s, session: session);
+      // _reportException(session.server, e, s, session: session);
       return;
     } catch (e, s) {
-      _reportException(session.server, e, s, session: session);
+      // _reportException(session.server, e, s, session: session);
       return;
     }
   }
 
-  static void _reportException(
-    Server server,
-    Object e,
-    StackTrace stackTrace, {
-    OriginSpace space = OriginSpace.framework,
-    String? message,
-    HttpRequest? httpRequest,
-    StreamingSession? session,
-  }) {
-    var now = DateTime.now().toUtc();
-    if (message != null) {
-      stderr.writeln('$now ERROR: $message');
-    }
-    stderr.writeln('$now ERROR: $e');
-    stderr.writeln('$stackTrace');
+  // static void _reportException(
+  //   Server server,
+  //   Object e,
+  //   StackTrace stackTrace, {
+  //   OriginSpace space = OriginSpace.framework,
+  //   String? message,
+  //   HttpRequest? httpRequest,
+  //   StreamingSession? session,
+  // }) {
+  //   var now = DateTime.now().toUtc();
+  //   if (message != null) {
+  //     stderr.writeln('$now ERROR: $message');
+  //   }
+  //   stderr.writeln('$now ERROR: $e');
+  //   stderr.writeln('$stackTrace');
 
-    var context = session != null
-        ? contextFromSession(session, httpRequest: httpRequest)
-        : httpRequest != null
-            ? contextFromHttpRequest(server, httpRequest, OperationType.stream)
-            : contextFromServer(server);
+  //   var context = session != null
+  //       ? contextFromSession(session, httpRequest: httpRequest)
+  //       : httpRequest != null
+  //           ? contextFromHttpRequest(server, httpRequest, OperationType.stream)
+  //           : contextFromServer(server);
 
-    server.serverpod.internalSubmitEvent(
-      ExceptionEvent(e, stackTrace, message: message),
-      space: space,
-      context: context,
-    );
-  }
+  //   server.serverpod.internalSubmitEvent(
+  //     ExceptionEvent(e, stackTrace, message: message),
+  //     space: space,
+  //     context: context,
+  //   );
+  // }
 }

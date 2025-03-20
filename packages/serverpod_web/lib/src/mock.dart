@@ -1,13 +1,23 @@
 import 'dart:async';
+import 'dart:js_interop';
 
 abstract interface class DatabaseAccessor {}
 
-class HttpRequest {}
+extension type HttpRequest._(JSObject _) implements JSObject {
+  external String get url;
 
-class WebSocket implements Stream<dynamic /*String|List<int>*/ >, StreamSink<dynamic /*String|List<int>*/ > {
+  Uri get uri => Uri.parse(url);
+  // external Headers get headers;
+}
+
+class WebSocket
+    implements
+        Stream<dynamic /*String|List<int>*/ >,
+        StreamSink<dynamic /*String|List<int>*/ > {
   // Implementing Stream methods
   @override
-  StreamSubscription<dynamic> listen(void Function(dynamic event)? onData, {Function? onError, void Function()? onDone, bool? cancelOnError}) {
+  StreamSubscription<dynamic> listen(void Function(dynamic event)? onData,
+      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
     throw UnimplementedError();
   }
 
@@ -17,7 +27,9 @@ class WebSocket implements Stream<dynamic /*String|List<int>*/ >, StreamSink<dyn
   }
 
   @override
-  Stream<T> asBroadcastStream({void Function(StreamSubscription<dynamic> subscription)? onListen, void Function(StreamSubscription<dynamic> subscription)? onCancel}) {
+  Stream<T> asBroadcastStream(
+      {void Function(StreamSubscription<dynamic> subscription)? onListen,
+      void Function(StreamSubscription<dynamic> subscription)? onCancel}) {
     throw UnimplementedError();
   }
 

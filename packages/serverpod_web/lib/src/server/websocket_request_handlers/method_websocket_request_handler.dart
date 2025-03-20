@@ -11,6 +11,7 @@ import 'package:serverpod/src/server/session.dart';
 
 import 'helpers/method_stream_manager.dart';
 import 'package:serverpod/serverpod.dart';
+
 /// This class is used by the [Server] to handle incoming websocket requests
 /// to a method. It is not intended to be used directly by the user.
 @internal
@@ -119,17 +120,17 @@ class MethodWebsocketRequestHandler {
         }
       }
     } catch (e, stackTrace) {
-      server.serverpod.internalSubmitEvent(
-        ExceptionEvent(e, stackTrace, message: 'Method stream websocket error'),
-        space: OriginSpace.framework,
-        context: contextFromHttpRequest(server, request, OperationType.stream),
-      );
-      if (e is! UnknownMessageException ||
-          server.serverpod.runtimeSettings.logMalformedCalls) {
-        stderr.writeln(
-            '${DateTime.now().toUtc()} Method stream websocket error: $e');
-        stderr.writeln('$stackTrace');
-      }
+      // server.serverpod.internalSubmitEvent(
+      //   ExceptionEvent(e, stackTrace, message: 'Method stream websocket error'),
+      //   space: OriginSpace.framework,
+      //   context: contextFromHttpRequest(server, request, OperationType.stream),
+      // );
+      // if (e is! UnknownMessageException ||
+      //     server.serverpod.runtimeSettings.logMalformedCalls) {
+      //   stderr.writeln(
+      //       '${DateTime.now().toUtc()} Method stream websocket error: $e');
+      //   stderr.writeln('$stackTrace');
+      // }
     } finally {
       server.serverpod.logVerbose(
         'Closing method stream websocket while '
@@ -185,17 +186,17 @@ class MethodWebsocketRequestHandler {
         StackTrace stackTrace,
         MethodStreamCallContext callContext,
       ) {
-        server.serverpod.internalSubmitEvent(
-          ExceptionEvent(error, stackTrace),
-          space: OriginSpace.application,
-          context: _makeEventContext(
-            server,
-            httpRequest: webSocket.httpRequest,
-            endpoint: callContext.endpoint.name,
-            method: callContext.method.name,
-            streamConnectionId: methodStreamId,
-          ),
-        );
+        // server.serverpod.internalSubmitEvent(
+        //   ExceptionEvent(error, stackTrace),
+        //   space: OriginSpace.application,
+        //   context: _makeEventContext(
+        //     server,
+        //     httpRequest: webSocket.httpRequest,
+        //     endpoint: callContext.endpoint.name,
+        //     method: callContext.method.name,
+        //     streamConnectionId: methodStreamId,
+        //   ),
+        // );
 
         if (error is SerializableException) {
           webSocket.tryAdd(
@@ -444,20 +445,20 @@ class MethodWebsocketRequestHandler {
       server.serverpod.logVerbose(message);
     }
 
-    server.serverpod.internalSubmitEvent(
-      ExceptionEvent(e, stackTrace, message: message),
-      space: OriginSpace.framework,
-      context: streamCommandMessage != null
-          ? _makeEventContext(
-              server,
-              httpRequest: webSocketIntermediary.httpRequest,
-              endpoint: streamCommandMessage.endpoint,
-              method: streamCommandMessage.method,
-              streamConnectionId: streamCommandMessage.connectionId,
-              session: session,
-            )
-          : contextFromServer(server),
-    );
+    // server.serverpod.internalSubmitEvent(
+    //   ExceptionEvent(e, stackTrace, message: message),
+    //   space: OriginSpace.framework,
+    //   context: streamCommandMessage != null
+    //       ? _makeEventContext(
+    //           server,
+    //           httpRequest: webSocketIntermediary.httpRequest,
+    //           endpoint: streamCommandMessage.endpoint,
+    //           method: streamCommandMessage.method,
+    //           streamConnectionId: streamCommandMessage.connectionId,
+    //           session: session,
+    //         )
+    //       : contextFromServer(server),
+    // );
   }
 }
 
@@ -499,8 +500,8 @@ class _WebSocketIntermediary {
     try {
       webSocket.add(data);
     } catch (e, stackTrace) {
-      stderr.writeln(
-          'Error "$e", when trying to send data over websocket: $data');
+      // stderr.writeln(
+      //     'Error "$e", when trying to send data over websocket: $data');
 
       MethodWebsocketRequestHandler._reportFrameworkException(
         server,
