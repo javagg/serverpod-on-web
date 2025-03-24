@@ -1,7 +1,8 @@
 import 'dart:js_interop';
+import 'package:serverpod/server.dart';
+import 'dart:js_interop_unsafe';
 import 'supabase.dart';
 // import 'dart:convert';
-
 
 // Response handleRequest(Request request) {
 //   var uri = Uri.parse(request.url);
@@ -61,7 +62,14 @@ import 'supabase.dart';
 //   return new Response(null, ResponseInit(status: 101, webSocket: client));
 // }
 
+class HttpRequest {
+ 
+}
+
+
 Response handle(Request request) {
+  var req = HttpRequest();
+  var res = new Serverpod().server.handle(req);
   return Response("hello dart!", ResponseInit());
 }
 
@@ -72,5 +80,10 @@ external void serve(JSFunction callback);
 external void upgradeWebSocket(Request request);
 
 void main() {
-  serve(handle.toJS);
+  // serve(handle.toJS);
+
+  serve((Request request) {
+     return futureToPromise(handle(request));
+  }.toJS);
+
 }

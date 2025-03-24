@@ -1,6 +1,7 @@
 import 'package:serverpod_serialization/serverpod_serialization.dart';
 
 // import '../authentication/scope.dart';
+import '../authentication/scope.dart';
 import 'server.dart';
 // import 'serverpod.dart';
 import 'session.dart';
@@ -28,4 +29,12 @@ abstract class Endpoint {
 
   /// Called when a stream was closed.
   Future<void> streamClosed(StreamingSession session) async {}
+
+  /// States if the [Endpoint] only should accept users that are authenticated.
+  /// Default value is false, override to change.
+  bool get requireLogin => false;
+
+  /// List of [Scope]s that are required to access this [Endpoint]. Override
+  /// this getter to setup custom requirements.
+  Set<Scope> get requiredScopes => {};
 }

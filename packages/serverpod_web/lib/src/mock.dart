@@ -10,6 +10,14 @@ extension type HttpRequest._(JSObject _) implements JSObject {
   // external Headers get headers;
 }
 
+
+extension type HttpResponse._(JSObject _) implements JSObject {
+  // external String get url;
+
+  // Uri get uri => Uri.parse(url);
+  // external Headers get headers;
+}
+
 class WebSocket
     implements
         Stream<dynamic /*String|List<int>*/ >,
