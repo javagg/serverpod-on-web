@@ -62,28 +62,22 @@ import 'supabase.dart';
 //   return new Response(null, ResponseInit(status: 101, webSocket: client));
 // }
 
-class HttpRequest {
- 
-}
+class HttpRequest {}
 
-
-Response handle(Request request) {
+Future<Response> handle(Request request) async {
   var req = HttpRequest();
   var res = new Serverpod().server.handle(req);
   return Response("hello dart!", ResponseInit());
 }
 
 @JS("Deno.serve")
-external void serve(JSFunction callback);
+external void serve(JSPromise callback);
 
 @JS("Deno.upgradeWebSocket")
 external void upgradeWebSocket(Request request);
 
-void main() {
-  // serve(handle.toJS);
-
-  serve((Request request) {
-     return futureToPromise(handle(request));
-  }.toJS);
-
+Future<void> main() async {
+  // serve(JSPromise(handle(request)).toJS);
+  var h = JSPromise(handle.toJS);
+  serve(h);
 }
