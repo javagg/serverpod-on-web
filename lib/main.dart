@@ -1,6 +1,5 @@
 import 'dart:js_interop';
-import 'package:serverpod/server.dart';
-import 'dart:js_interop_unsafe';
+// import 'package:serverpod/server.dart';
 import 'supabase.dart';
 // import 'dart:convert';
 
@@ -65,19 +64,21 @@ import 'supabase.dart';
 class HttpRequest {}
 
 Future<Response> handle(Request request) async {
-  var req = HttpRequest();
-  var res = new Serverpod().server.handle(req);
+  await Future.delayed(Duration(milliseconds: 100));
   return Response("hello dart!", ResponseInit());
 }
 
 @JS("Deno.serve")
-external void serve(JSPromise callback);
+external void serve(JSFunction callback);
 
 @JS("Deno.upgradeWebSocket")
 external void upgradeWebSocket(Request request);
 
 Future<void> main() async {
   // serve(JSPromise(handle(request)).toJS);
-  var h = JSPromise(handle.toJS);
-  serve(h);
+  // var h = JSPromise(handle.toJS);
+  serve((Request request) {
+    var f = handle(request);
+    return f.toJS;
+  }.toJS);
 }

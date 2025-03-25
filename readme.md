@@ -1,7 +1,7 @@
 # guide
 ## setup
 ```
-supebase init
+supebase init # first time only
 supabase start -x vector
 ```
 ## build
@@ -10,5 +10,5 @@ dart compile js lib/main.dart -o supabase/functions/build/main.js
 ```
 ## run 
 ```
-supabase serve
+supabase functions serve
 ```
