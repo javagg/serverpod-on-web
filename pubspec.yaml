@@ -6,3 +6,8 @@ dependencies:
   serverpod_shared: ^2.4.0
   serverpod:
     path: packages/serverpod_web
+  postgres: ^3.0.1
+
+dependency_overrides:
+  postgres:
+    path: packages/postgres

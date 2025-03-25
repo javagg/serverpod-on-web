@@ -1,0 +1,10 @@
+name: postgres
+version: 3.0.1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  args: ^2.4.0
+
+
