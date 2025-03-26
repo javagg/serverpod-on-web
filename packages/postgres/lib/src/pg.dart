@@ -5,6 +5,7 @@ extension type Sql._(JSObject _) implements JSObject {
 }
 
 extension type Postgres._(JSObject _) implements JSObject {
+  @JS('postgres')
   external factory Postgres(JSAny? a, JSAny? b);
   external Sql get sql;
   // external static int get staticMember;
